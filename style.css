@@ -2,6 +2,8 @@
     --primary-color: #1a2b33;
     --secondary-color: #1e3640;
     --grey-color: #a9bec8;
+    --pink-color: #e32c89;
+    --orange-color: #ee8a1a;
 
 }
 
@@ -27,7 +29,11 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 25px;
+}
+
+.logo {
+    cursor: pointer;
 }
 
 .logo > img {
@@ -39,11 +45,12 @@
     display: flex;
     gap: 25px;
     margin-right: 50px;
+    cursor: default;
     
     
 }
 
-.player-x , .player-o {
+#player-x , #player-o {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,23 +62,33 @@
 
 }
 
-.player-x > img , .player-o > img {
+
+
+#player-x > img , #player-o > img {
     width: 30px;
     height: 30px;
     background-color: var(--secondary-color);
 }
 
-.player-x > div , .player-o > div {
+
+
+#player-x > div , #player-o > div {
     background-color: var(--secondary-color);
     color: var(--grey-color);
     font-weight: bold;
     
 }
 
+.active {
+    color: var(--secondary-color);
+    background-color: var(--grey-color);
+}
+
 .home {
     background-color: var(--grey-color);
     padding: 10px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .home > img {
@@ -121,6 +138,7 @@
     font-size: 50px;
     font-family: sans-serif;
     font-weight: bold;
+    color: var(--grey-color);
     box-shadow: 0px 10px 10px rgba(0,0,0,0.3);
 }
 
@@ -129,14 +147,49 @@
 }
 
 .score-board {
-    display: flex;
-    justify-content: center;
-    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 27px;
 }
 
 .x-score , .ties , .o-score {
     display: flex;
     flex-direction: column;
-    padding: 5px 10px;
-    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 8px;
+    width: 90%;
+    justify-self: center;
+    
+    
 }
+
+
+.x-score , .x-score > div {
+    background-color: var(--pink-color);
+}
+
+.ties , .ties > div {
+    background-color: var(--grey-color);
+}
+
+.o-score , .o-score > div {
+    background-color: var(--orange-color);
+}
+
+.score-text {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+#o-score-value , #tie-score-value , #x-score-value {
+    font-weight: bold;
+    font-size: 24px;
+}
+
