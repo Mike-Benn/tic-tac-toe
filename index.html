@@ -5,26 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="player-data">
-
-    </div>
-    <div class="score-board">
+    <div class="page-container">
+        <div class="pregame-container">
+            <div class="p1-name">
+                <label for="PlayerOneName">Enter Player One's Name:</label>
+                <input type="text" name="PlayerOneName" id="PlayerOneName">
+            </div>
+            <div class="p2-name">
+                <label for="PlayerTwoName">Enter Player Two's Name:</label>
+                <input type="text" name="PlayerTwoName" id="PlayerTwoName">
+            </div>
+            <div class="start-button">
+                <button type="button">Start game</button>
+            </div>
+        </div>
         
-    </div>
+        <div class="active-container">
+            <div class="score-board">
+                <div id="player-one">Player 1</div>
+                <div id="player-two">Player 2</div>
+            </div>
 
-    <div class="game-container">
-        <div id="top-left" class="gamesquare"></div>
-        <div id="top-middle" class="gamesquare"></div>
-        <div id="top-right" class="gamesquare"></div>
-        <div id="middle-left" class="gamesquare"></div>
-        <div id="middle-middle" class="gamesquare"></div>
-        <div id="middle-right" class="gamesquare"></div>
-        <div id="bottom-left" class="gamesquare"></div>
-        <div id="bottom-middle" class="gamesquare"></div>
-        <div id="bottom-right" class="gamesquare"></div>
+            <div class="game-container">
+                <div id="top-left" class="gamesquare"></div>
+                <div id="top-middle" class="gamesquare"></div>
+                <div id="top-right" class="gamesquare"></div>
+                <div id="middle-left" class="gamesquare"></div>
+                <div id="middle-middle" class="gamesquare"></div>
+                <div id="middle-right" class="gamesquare"></div>
+                <div id="bottom-left" class="gamesquare"></div>
+                <div id="bottom-middle" class="gamesquare"></div>
+                <div id="bottom-right" class="gamesquare"></div>
+            </div>
+         </div>
     </div>
 </body>
 </html>
