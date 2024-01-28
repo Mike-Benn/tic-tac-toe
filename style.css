@@ -8,6 +8,48 @@ body {
     height: 100%;
 }
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-top: 50px;
+}
+
+.pregame-container {
+    display: flex;
+    gap: 25px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid black;
+    width: 30%;
+}
+
+.active-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.score-board {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+}
+
+#player-one , #player-two {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.player-active {
+    color: white;
+    background-color: black;
+}
+
 .game-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -24,6 +66,12 @@ body {
     border: 1px solid black;
     align-self: center;
     justify-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    font-family: sans-serif;
+    font-weight: bold;
 }
 
 .gamesquare:hover {
