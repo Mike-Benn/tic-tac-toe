@@ -1,61 +1,133 @@
-const topLeft = document.querySelector('#top-left');
-const topMiddle = document.querySelector('#top-middle');
-const topRight = document.querySelector('#top-right');
-const middleLeft = document.querySelector('#middle-left');
-const middleMiddle = document.querySelector('#middle-middle');
-const middleRight = document.querySelector('#middle-right');
-const bottomLeft = document.querySelector('#bottom-left');
-const bottomMiddle = document.querySelector('#bottom-middle');
-const bottomRight = document.querySelector('#bottom-right');
-const playerX = document.querySelector('#player-x');
-const playerO = document.querySelector('#player-o');
-const xImage = document.querySelector('#x-image');
-const oImage = document.querySelector('#o-image');
-const xText = document.querySelector('#x-text');
-const oText = document.querySelector('#o-text');
-const rootStyles = getComputedStyle(document.documentElement);
-const primaryColor = rootStyles.getPropertyValue('--primary-color');
-const secondaryColor = rootStyles.getPropertyValue('--secondary-color');
-const greyColor = rootStyles.getPropertyValue('--grey-color');
-const pinkColor = rootStyles.getPropertyValue('--pink-color');
-const orangeColor = rootStyles.getPropertyValue('--orange-color');
+function turnSetupX() {
+    playerO.classList.remove('active');
+    oImage.src = "./images/oletter.png";
+    oImage.style.backgroundColor = secondaryColor;
+    playerO.style.backgroundColor = secondaryColor;
+    oText.style.color = greyColor;
+    oText.style.backgroundColor = secondaryColor;
 
-
-let board = [ [ [topLeft , "0 0" , ] , [topMiddle , "0 1"] , [topRight , "0 2"] ] , [ [middleLeft , "1 0"] , [middleMiddle , "1 1"] , [middleRight , "1 2"] ] , 
-[ [bottomLeft , "2 0"] , [bottomMiddle , "2 1"] , [bottomRight , "2 2"] ] ];
-
-  
-
-/*
-let top = {
+    playerX.classList.add('active');
+    xImage.src = "./images/xletter-inverted.png";
+    xImage.style.backgroundColor = greyColor;
+    playerX.style.backgroundColor = greyColor;
+    xText.style.color = secondaryColor;
+    xText.style.backgroundColor = greyColor;
     
-    topLeft: {
-        value: null,
-        adjacent: [ [topMiddle , topRight] , [middleLeft , bottomLeft] , [middleMiddle , bottomRight]]
-    },
-
-    topMiddle: {
-        value: null,
-        adjacent: [ [topLeft , topRight] , [middleMiddle , bottomMiddle] ],
-        coordinates: "0 1"
-    },
-
-    topRight: {
-        value: null,
-        adjacent: [ [topMiddle , topLeft] , [middleMiddle , bottomLeft] , [middleRight , bottomRight] ],
-        coordinates: "0 2"
-    }
 }
-*/
+
+function turnSetupO() {
+    playerX.classList.remove('active');
+    xImage.src = "./images/xletter.png";
+    xImage.style.backgroundColor = secondaryColor;
+    playerX.style.backgroundColor = secondaryColor;
+    xText.style.color = greyColor;
+    xText.style.backgroundColor = secondaryColor;
+
+    playerO.classList.add('active');
+    oImage.src = "./images/oletter-inverted.png";
+    oImage.style.backgroundColor = greyColor;
+    playerO.style.backgroundColor = greyColor;
+    oText.style.color = secondaryColor;
+    oText.style.backgroundColor = greyColor;
+    
+}
+
+function ScreenController() {
+    const game = GameController();
+    const turnDiv = document.querySelector('.turn');
+    const boardDiv = document.querySelector('.board');
+
+    const updateScreen = () => {
+
+        boardDiv.textContent = "";
+        
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+
+        
+        // turnDiv.textContent = `${activePlayer.getName()}'s turn...`;
+
+        board.forEach((row , rowIndex) => {
+            row.forEach((cell , colIndex) => {
+                const cellButton = document.createElement("button");
+                cellButton.dataset.row = rowIndex;
+                cellButton.dataset.column = colIndex;
+                cellButton.classList.add("cell");
+                cellButton.textContent = cell.getValue();
+                boardDiv.appendChild(cellButton);
+            })
+        })
+    }
+
+    function clickHandlerBoard(e) {
+        const selectedRow = e.target.dataset.row;
+        const selectedColumn = e.target.dataset.column;
+
+        if (!selectedRow) return;
+
+        game.playRound(selectedRow , selectedColumn);
+        updateScreen();
+        
+    }
+
+    boardDiv.addEventListener('click' , clickHandlerBoard);
+
+    updateScreen();
+
+}
+
+function GameController() {
+    const playerOne = Player("Xander" , "X");
+    const playerTwo = Player("Oliver" , "O");
+    const players = [playerOne , playerTwo];
+    let activePlayer = players[0];
+    const board = GameBoard();
+
+    const getBoard = () => board.getBoard();
+
+    const switchTurn = () => {
+        if (activePlayer === players[0]) {
+            activePlayer = players[1];
+        } else {
+            activePlayer = players[0];
+        }
+    };
+
+    const getActivePlayer = () => activePlayer;
+
+    const printNewRound = () => {
+        board.printBoard();
+        console.log(`${getActivePlayer().getName()}'s turn.`);
+    };
+
+    const playRound = (row , column) => {
+        board.placeToken(row , column , getActivePlayer().getToken());
+        switchTurn();
+
+
+    }
+
+    
+    
+    
+
+    return {
+        playRound,
+        getActivePlayer,
+        getBoard
+    }
+
+}
 
 function GameBoard() {
     const rows = 3;
     const columns = 3;
     const board = [];
 
-    for (let r = 0; r++; r < rows) {
+    for (let r = 0; r < rows; r++) {
         board[r] = [];
-        for (let c = 0; c++; c < columns) {
+        for (let c = 0; c < columns; c++) {
             board[r].push(Cell());
         }
     }
@@ -63,7 +135,7 @@ function GameBoard() {
     const getBoard = () => board;
 
     const placeToken = (row , column , token) => {
-        if (board[row][column].getValue() === 0) {
+        if (board[row][column].getValue() === "") {
             board[row][column].addToken(token);
         } else {
             console.log("Invalid move");
@@ -99,7 +171,7 @@ function Player(name , token) {
 }
 
 function Cell() {
-    let value = 0;
+    let value = "";
 
     const addToken = (token) => {
         value = token;
@@ -113,41 +185,11 @@ function Cell() {
     };
 }
 
+ScreenController();
 
 
-function turnSetupX() {
-    playerO.classList.remove('active');
-    oImage.src = "./images/oletter.png";
-    oImage.style.backgroundColor = secondaryColor;
-    playerO.style.backgroundColor = secondaryColor;
-    oText.style.color = greyColor;
-    oText.style.backgroundColor = secondaryColor;
 
-    playerX.classList.add('active');
-    xImage.src = "./images/xletter-inverted.png";
-    xImage.style.backgroundColor = greyColor;
-    playerX.style.backgroundColor = greyColor;
-    xText.style.color = secondaryColor;
-    xText.style.backgroundColor = greyColor;
-    
-}
 
-function turnSetupO() {
-    playerX.classList.remove('active');
-    xImage.src = "./images/xletter.png";
-    xImage.style.backgroundColor = secondaryColor;
-    playerX.style.backgroundColor = secondaryColor;
-    xText.style.color = greyColor;
-    xText.style.backgroundColor = secondaryColor;
-
-    playerO.classList.add('active');
-    oImage.src = "./images/oletter-inverted.png";
-    oImage.style.backgroundColor = greyColor;
-    playerO.style.backgroundColor = greyColor;
-    oText.style.color = secondaryColor;
-    oText.style.backgroundColor = greyColor;
-    
-}
 
 
 
