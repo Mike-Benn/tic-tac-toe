@@ -23,7 +23,7 @@ body {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    gap: 25px;
+    gap: 40px;
 }
 
 .header {
@@ -64,7 +64,7 @@ button > img {
     gap: 10px;
 }
 
-#player-one , #player-two {
+#player-one-selected , #player-two-selected , #player-one-deselected , #player-two-deselected {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,19 +72,19 @@ button > img {
     padding: 5px 10px;
     border-radius: 5px;
     
-    
 }
 
-#player-one {
+
+
+#player-one-selected , #player-two-selected {
     background-color: var(--grey-color);
-
 }
 
-#player-two {
+#player-one-deselected , #player-two-deselected {
     background-color: var(--secondary-color);
 }
 
-#player-one::after , #player-two::after {
+#player-one-selected::after , #player-two-selected::after , #player-one-deselected::after , #player-two-deselected::after {
     content: "TURN";
     font-weight: bold;
     padding-left: 3px;
@@ -92,17 +92,24 @@ button > img {
     
 }
 
-#player-one::after {
+#player-one-selected::after {
     color: var(--secondary-color);
     background-color: var(--grey-color);
 }
 
-#player-two::after {
+#player-two-selected::after {
+    color: var(--secondary-color);
+    background-color: var(--grey-color);
+}
+
+
+
+#player-two-deselected::after , #player-one-deselected::after{
     color: var(--grey-color);
     background-color: var(--secondary-color);
 }
 
-#player-one > img , #player-two > img {
+#player-one-selected > img , #player-two-selected > img , #player-one-deselected > img , #player-two-deselected > img {
     height: 30px;
     width: 30px;
     
@@ -111,6 +118,14 @@ button > img {
 
 .inactive , .inactive::after {
     display: none;
+    visibility: hidden;
+    padding: 0px;
+}
+
+.inactive , .inactive::after , #player-one-selected.inactive , #player-two-selected.inactive , #player-one-deselected.inactive , #player-two-deselected.inactive {
+    display: none;
+    visibility: hidden;
+    padding: 0px;
 }
 
 .home {
@@ -144,18 +159,91 @@ button > img {
 
 
 
+.footer {
+    display: grid;
+    grid-template-columns: repeat(3 , 1fr);
+    gap: 20px;
+    margin-bottom: 10px;
+    
+}
+
+#player-one-score , #ties , #player-two-score {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 #player-one-score , #player-one-score > div {
     background-color: var(--pink-color);
     color: var(--primary-color);
-
+    border-radius: 8px;
+    padding: 5px 10px;
 }
 
 #ties , #ties > div {
     background-color: var(--grey-color);
     color: var(--primary-color);
+    border-radius: 8px;
+    padding: 5px 10px;
+    
 }
 
 #player-two-score , #player-two-score > div {
     background-color: var(--orange-color);
     color: var(--primary-color);
+    border-radius: 8px;
+    padding: 5px 10px;
+}
+
+.footer-name {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.p1-score , .ties-score , .p2-score {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.gameover-message {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    background-color: var(--secondary-color);
+    position: fixed;
+    gap: 15px;
+}
+
+.gameover-message > h4 {
+    grid-column: 1 / 3;
+    align-self: center;
+    justify-self: center;
+    background-color: var(--secondary-color);
+    color: var(--grey-color);
+}
+
+.gameover-image-container {
+    grid-column: 1 / 3;
+    align-self: center;
+    justify-self: center;
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+} 
+
+.gameover-image-container > img {
+    width: 50px;
+    height: 50px;
+}
+.gameover-image-container > div {
+    color: var(--grey-color);
+}
+.gameover-buttons {
+    grid-column: 1 / 3;
+    align-self: center;
+    justify-self: center;
+    background-color: var(--secondary-color);
 }
