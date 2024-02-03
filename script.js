@@ -1,37 +1,3 @@
-function turnSetupX() {
-    playerO.classList.remove('active');
-    oImage.src = "./images/oletter.png";
-    oImage.style.backgroundColor = secondaryColor;
-    playerO.style.backgroundColor = secondaryColor;
-    oText.style.color = greyColor;
-    oText.style.backgroundColor = secondaryColor;
-
-    playerX.classList.add('active');
-    xImage.src = "./images/xletter-inverted.png";
-    xImage.style.backgroundColor = greyColor;
-    playerX.style.backgroundColor = greyColor;
-    xText.style.color = secondaryColor;
-    xText.style.backgroundColor = greyColor;
-    
-}
-
-function turnSetupO() {
-    playerX.classList.remove('active');
-    xImage.src = "./images/xletter.png";
-    xImage.style.backgroundColor = secondaryColor;
-    playerX.style.backgroundColor = secondaryColor;
-    xText.style.color = greyColor;
-    xText.style.backgroundColor = secondaryColor;
-
-    playerO.classList.add('active');
-    oImage.src = "./images/oletter-inverted.png";
-    oImage.style.backgroundColor = greyColor;
-    playerO.style.backgroundColor = greyColor;
-    oText.style.color = secondaryColor;
-    oText.style.backgroundColor = greyColor;
-    
-}
-
 function ScreenController() {
     const game = GameController();
     const xSelected = document.querySelector('#player-one-selected');
@@ -111,8 +77,36 @@ function GameController() {
     const players = [playerOne , playerTwo];
     let activePlayer = players[0];
     const board = GameBoard();
-
+    let gameState = "active";
+    
     const getBoard = () => board.getBoard();
+
+    const getState = () => gameState;
+
+    function isWinner(player) {
+        let playsList = player.getPlays();
+        let comboList = board.getCombinations();
+
+        for (let i = 0; i < comboList.length; i++) {
+            let currCombo = comboList[i];
+            let counter = 0;
+            
+            for (let j = 0; j < playsList.length; j++) {
+                if (currCombo.has(playsList[j])) {
+                    counter = counter + 1;
+                    if (counter >= 3) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+
+        
+
+
+    }
+
 
     const switchTurn = () => {
         if (activePlayer === players[0]) {
@@ -131,28 +125,41 @@ function GameController() {
 
     const playRound = (row , column) => {
 
-        
         result = board.placeToken(row , column , getActivePlayer().getToken());
+        let location = "" + row + column;
 
         if (result) {
-            switchTurn();
+            let currActivePlayer = getActivePlayer();
+            currActivePlayer.addPlay(location);
+            
+            if (currActivePlayer.getPlays().length >= 3) {
+                let end = isWinner(currActivePlayer);
+                console.log(end);
+                switchTurn();
+
+            } else {
+                switchTurn();
+
+            }
+            
+
+            
+
+
+
+            
+
         } else {
             return
         }
-        
-        
-
 
     }
-
-    
-    
-    
 
     return {
         playRound,
         getActivePlayer,
-        getBoard
+        getBoard,
+        getState
     }
 
 }
@@ -160,6 +167,17 @@ function GameController() {
 function GameBoard() {
     const rows = 3;
     const columns = 3;
+    const WINNING_COMBINATIONS = [
+        new Set(["00" , "01" , "02"]),
+        new Set(["10" , "11" , "12"]),
+        new Set(["20" , "21" , "22"]),
+        new Set(["00" , "10" , "20"]),
+        new Set(["01" , "11" , "21"]),
+        new Set(["02" , "12" , "22"]),
+        new Set(["00" , "11" , "22"]),
+        new Set(["02" , "11" , "20"])
+    ]
+
     const board = [];
 
     for (let r = 0; r < rows; r++) {
@@ -170,6 +188,8 @@ function GameBoard() {
     }
 
     const getBoard = () => board;
+
+    const getCombinations = () => WINNING_COMBINATIONS;
 
     const placeToken = (row , column , token) => {
         if (board[row][column].getValue() === "") {
@@ -187,6 +207,7 @@ function GameBoard() {
 
     return {
         getBoard,
+        getCombinations,
         placeToken,
         printBoard
     };
@@ -201,6 +222,7 @@ function Player(name , token) {
 
     const getName = () => playerName;
     const getToken = () => playerToken;
+    const getPlays = () => plays;
     const addPlay = (location) => {
         plays.push(location);
     };
@@ -208,6 +230,7 @@ function Player(name , token) {
     return {
         getName,
         getToken,
+        getPlays,
         addPlay
     };
 
