@@ -34,7 +34,14 @@ function turnSetupO() {
 
 function ScreenController() {
     const game = GameController();
-    const turnDiv = document.querySelector('.turn');
+    const xSelected = document.querySelector('#player-one-selected');
+    const xImageSelected = document.querySelector('#player-one-image-selected');
+    const oSelected = document.querySelector('#player-two-selected');
+    const oImageSelected = document.querySelector('#player-two-image-selected');
+    const xDeselected = document.querySelector('#player-one-deselected');
+    const xImageDeselected = document.querySelector('#player-one-image-deselected');
+    const oDeselected = document.querySelector('#player-two-deselected');
+    const oImageDeselected = document.querySelector('#player-two-image-deselected');
     const boardDiv = document.querySelector('.board');
 
     const updateScreen = () => {
@@ -44,9 +51,30 @@ function ScreenController() {
         const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
 
-
         
-        // turnDiv.textContent = `${activePlayer.getName()}'s turn...`;
+        if (activePlayer.getToken() === "X") {
+            xSelected.classList.remove('inactive');
+            xImageSelected.classList.remove('inactive');
+            oDeselected.classList.remove('inactive');
+            oImageDeselected.classList.remove('inactive');
+
+            oSelected.classList.add('inactive');
+            oImageSelected.classList.add('inactive');
+            xDeselected.classList.add('inactive');
+            xImageDeselected.classList.add('inactive');
+        } else {
+            oSelected.classList.remove('inactive');
+            oImageSelected.classList.remove('inactive');
+            xDeselected.classList.remove('inactive');
+            xImageDeselected.classList.remove('inactive');
+
+            xSelected.classList.add('inactive');
+            xImageSelected.classList.add('inactive');
+            oDeselected.classList.add('inactive');
+            oImageDeselected.classList.add('inactive');
+        }
+        
+        
 
         board.forEach((row , rowIndex) => {
             row.forEach((cell , colIndex) => {
