@@ -130,8 +130,17 @@ function GameController() {
     };
 
     const playRound = (row , column) => {
-        board.placeToken(row , column , getActivePlayer().getToken());
-        switchTurn();
+
+        
+        result = board.placeToken(row , column , getActivePlayer().getToken());
+
+        if (result) {
+            switchTurn();
+        } else {
+            return
+        }
+        
+        
 
 
     }
@@ -165,8 +174,9 @@ function GameBoard() {
     const placeToken = (row , column , token) => {
         if (board[row][column].getValue() === "") {
             board[row][column].addToken(token);
+            return true;
         } else {
-            console.log("Invalid move");
+            return false;
         }
     }
 
@@ -187,13 +197,18 @@ function GameBoard() {
 function Player(name , token) {
     const playerName = name;
     const playerToken = token;
+    const plays = [];
 
     const getName = () => playerName;
     const getToken = () => playerToken;
+    const addPlay = (location) => {
+        plays.push(location);
+    };
 
     return {
         getName,
-        getToken
+        getToken,
+        addPlay
     };
 
 }
