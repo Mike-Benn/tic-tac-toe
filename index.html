@@ -8,55 +8,47 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <div class="page-container">
+    <div class="game-container">
         <div class="header">
             <div class="logo">
-                <img src="./images/logo.png" alt="Image of the phrase tic tac toe">
+                <img src="./images/logo.png" alt="Picture of the phrase tic tac toe">
             </div>
-            
-            <div class="turn-display">
-                <div id="player-x" class="active">
-                    <img src="./images/xletter.png" alt="Picture of the letter X" class="x-normal">
-                    <div>PLAYER</div>
+            <div class="turn">
+                <div id="player-one-selected">
+                    <img src="./images/xletter-inverted.png" alt="Picture of the letter X">
                 </div>
-                <div id="player-o">
-                    <img src="./images/oletter.png" alt="Picture of the letter O" class="o-normal">
-                    <div>PLAYER</div>
+                <div id="player-one-deselected">
+                    <img src="./images/xletter.png" alt="Picture of the letter X">
+                </div>
+                <div id="player-two-selected">
+                    <img src="./images/oletter-inverted.png" alt="Picture of the letter O">
+                </div>
+                <div id="player-two-deselected">
+                    <img src="./images/oletter.png" alt="Picture of the letter O">
                 </div>
             </div>
-
             <div class="home">
-                <img src="./images/home.png" alt="Image of a house">
+                <button>
+                    <img src="./images/home.png" alt="Picture of a house">
+                </button>
             </div>
         </div>
-        <div class="game-container">
-            <div id="top-left" class="gamesquare"></div>
-            <div id="top-middle" class="gamesquare"></div>
-            <div id="top-right" class="gamesquare"></div>
-            <div id="middle-left" class="gamesquare"></div>
-            <div id="middle-middle" class="gamesquare"></div>
-            <div id="middle-right" class="gamesquare"></div>
-            <div id="bottom-left" class="gamesquare"></div>
-            <div id="bottom-middle" class="gamesquare"></div>
-            <div id="bottom-right" class="gamesquare"></div>
-        </div>
-        <div class="score-board">
-            <div class="x-score">
-                <div class="score-text">X PLAYER</div>
-                <div id="x-score-value">0</div>
+        <div class="board"></div>
+        <div class="footer">
+            <div id="player-one-score">
+                <div class="footer-name">PLAYER X</div>
+                <div class="p1-score">0</div>
             </div>
-            <div class="ties">
-                <div class="score-text">TIES</div>
-                <div id="tie-score-value">0</div>
+            <div id="ties">
+                <div class="footer-name">TIES</div>
+                <div class="ties-score">0</div>
             </div>
-            <div class="o-score">
-                <div class="score-text">O PLAYER</div>
-                <div id="o-score-value">0</div>
+            <div id="player-two-score">
+                <div class="footer-name">PLAYER O</div>
+                <div class="p2-score">0</div>
             </div>
         </div>
-
-
-         
     </div>
+    
 </body>
 </html>
