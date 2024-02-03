@@ -11,36 +11,10 @@ function ScreenController() {
     const boardDiv = document.querySelector('.board');
 
     const updateScreen = () => {
-
+        
         boardDiv.textContent = "";
-        
         const board = game.getBoard();
-        const activePlayer = game.getActivePlayer();
-
-        
-        if (activePlayer.getToken() === "X") {
-            xSelected.classList.remove('inactive');
-            xImageSelected.classList.remove('inactive');
-            oDeselected.classList.remove('inactive');
-            oImageDeselected.classList.remove('inactive');
-
-            oSelected.classList.add('inactive');
-            oImageSelected.classList.add('inactive');
-            xDeselected.classList.add('inactive');
-            xImageDeselected.classList.add('inactive');
-        } else {
-            oSelected.classList.remove('inactive');
-            oImageSelected.classList.remove('inactive');
-            xDeselected.classList.remove('inactive');
-            xImageDeselected.classList.remove('inactive');
-
-            xSelected.classList.add('inactive');
-            xImageSelected.classList.add('inactive');
-            oDeselected.classList.add('inactive');
-            oImageDeselected.classList.add('inactive');
-        }
-        
-        
+        let currentState = game.getState();
 
         board.forEach((row , rowIndex) => {
             row.forEach((cell , colIndex) => {
@@ -52,6 +26,45 @@ function ScreenController() {
                 boardDiv.appendChild(cellButton);
             })
         })
+
+
+
+        if (currentState === "active") { 
+
+            
+            const activePlayer = game.getActivePlayer();
+
+            
+            if (activePlayer.getToken() === "X") {
+                xSelected.classList.remove('inactive');
+                xImageSelected.classList.remove('inactive');
+                oDeselected.classList.remove('inactive');
+                oImageDeselected.classList.remove('inactive');
+
+                oSelected.classList.add('inactive');
+                oImageSelected.classList.add('inactive');
+                xDeselected.classList.add('inactive');
+                xImageDeselected.classList.add('inactive');
+            } else {
+                oSelected.classList.remove('inactive');
+                oImageSelected.classList.remove('inactive');
+                xDeselected.classList.remove('inactive');
+                xImageDeselected.classList.remove('inactive');
+
+                xSelected.classList.add('inactive');
+                xImageSelected.classList.add('inactive');
+                oDeselected.classList.add('inactive');
+                oImageDeselected.classList.add('inactive');
+            }
+            
+            
+
+            
+        } else if (currentState === "gameover") {
+            const activePlayer = null;
+            
+                     
+        } 
     }
 
     function clickHandlerBoard(e) {
@@ -77,7 +90,7 @@ function GameController() {
     const players = [playerOne , playerTwo];
     let activePlayer = players[0];
     const board = GameBoard();
-    let gameState = "active";
+    let gameState = "active"; // choices are "active" , "gameover" , "menu"
     
     const getBoard = () => board.getBoard();
 
@@ -95,15 +108,17 @@ function GameController() {
                 if (currCombo.has(playsList[j])) {
                     counter = counter + 1;
                     if (counter >= 3) {
-                        return true;
+                        gameState = "gameover";
+                        
+
                     }
                 }
             }
         }
-        return false;
 
-        
-
+        if (playsList.length == 5) {
+            gameState = "gameover";
+        }
 
     }
 
@@ -133,22 +148,15 @@ function GameController() {
             currActivePlayer.addPlay(location);
             
             if (currActivePlayer.getPlays().length >= 3) {
-                let end = isWinner(currActivePlayer);
-                console.log(end);
+                isWinner(currActivePlayer);
                 switchTurn();
+
 
             } else {
                 switchTurn();
 
             }
             
-
-            
-
-
-
-            
-
         } else {
             return
         }
@@ -218,11 +226,14 @@ function GameBoard() {
 function Player(name , token) {
     const playerName = name;
     const playerToken = token;
+    const score = 0;
     const plays = [];
 
     const getName = () => playerName;
     const getToken = () => playerToken;
+    const getScore = () => score;
     const getPlays = () => plays;
+
     const addPlay = (location) => {
         plays.push(location);
     };
@@ -230,6 +241,7 @@ function Player(name , token) {
     return {
         getName,
         getToken,
+        getScore,
         getPlays,
         addPlay
     };
