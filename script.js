@@ -5,6 +5,7 @@ function ScreenController() {
     const overImage = document.querySelector('#gameover-image');
     const gameoverHeader = document.querySelector('.gameover-header');
     const gameoverDeclaration = document.querySelector('.gameover-declaration');
+    const playAgainBtn = document.querySelector('#nextround-btn');
     const xSelected = document.querySelector('#player-one-selected');
     const xImageSelected = document.querySelector('#player-one-image-selected');
     const oSelected = document.querySelector('#player-two-selected');
@@ -99,7 +100,7 @@ function ScreenController() {
             
                      
         } 
-    }
+    };
 
     function clickHandlerBoard(e) {
         const selectedRow = e.target.dataset.row;
@@ -110,8 +111,17 @@ function ScreenController() {
         game.playRound(selectedRow , selectedColumn);
         updateScreen();
         
-    }
+    };
 
+    function clickHandlerPlayAgain(e) {
+        modal.style.display = "none";
+        overMessage.style.display = "none";
+        game.reset();
+        updateScreen();
+    };
+
+
+    playAgainBtn.addEventListener('click' , clickHandlerPlayAgain);
     boardDiv.addEventListener('click' , clickHandlerBoard);
 
     updateScreen();
@@ -124,7 +134,7 @@ function GameController() {
     const players = [playerOne , playerTwo];
     let winner = undefined;
     let activePlayer = players[0];
-    const board = GameBoard();
+    let board = GameBoard();
     let gameState = "active"; // choices are "active" , "gameover" , "menu"
     
     const getBoard = () => board.getBoard();
@@ -132,6 +142,8 @@ function GameController() {
     const getState = () => gameState;
 
     const getWinner = () => winner;
+
+    const getActivePlayer = () => activePlayer;
 
     function isGameOver(player) {
         let playsList = player.getPlays();
@@ -160,8 +172,7 @@ function GameController() {
             gameState = "gameover";
         }
 
-    }
-
+    };
 
     const switchTurn = () => {
         if (gameState === "active") {
@@ -171,13 +182,6 @@ function GameController() {
                 activePlayer = players[0];
             }
         }
-    };
-
-    const getActivePlayer = () => activePlayer;
-
-    const printNewRound = () => {
-        board.printBoard();
-        console.log(`${getActivePlayer().getName()}'s turn.`);
     };
 
     const playRound = (row , column) => {
@@ -200,18 +204,29 @@ function GameController() {
             }
             
         } else {
-            return
+            return;
         }
 
-    }
+    };
+
+    const reset = () => {
+        playerOne.reset();
+        playerTwo.reset();
+        board = GameBoard();
+        winner = undefined;
+        activePlayer = players[0];
+        gameState = "active";
+
+    };
 
     return {
         playRound,
         getActivePlayer,
         getBoard,
         getState,
-        getWinner
-    }
+        getWinner,
+        reset
+    };
 
 }
 
@@ -227,16 +242,16 @@ function GameBoard() {
         new Set(["02" , "12" , "22"]),
         new Set(["00" , "11" , "22"]),
         new Set(["02" , "11" , "20"])
-    ]
+    ];
 
-    const board = [];
+    let board = [];
 
     for (let r = 0; r < rows; r++) {
         board[r] = [];
         for (let c = 0; c < columns; c++) {
             board[r].push(Cell());
         }
-    }
+    };
 
     const getBoard = () => board;
 
@@ -249,18 +264,19 @@ function GameBoard() {
         } else {
             return false;
         }
-    }
+    };
 
     const printBoard = () => {
         const boardWithValues = board.map((row) => row.map((cell) => cell.getValue()));
         console.log(boardWithValues);
-    }
+    };
 
     return {
         getBoard,
         getCombinations,
         placeToken,
-        printBoard
+        printBoard,
+    
     };
 
 
@@ -270,7 +286,7 @@ function Player(name , token) {
     const playerName = name;
     const playerToken = token;
     let score = 0;
-    const plays = [];
+    let plays = [];
 
     const getName = () => playerName;
     const getToken = () => playerToken;
@@ -283,7 +299,11 @@ function Player(name , token) {
 
     const addWin = () => {
         score = score + 1;
-    }
+    };
+
+    const reset = () => {
+        plays = [];
+    };
 
     return {
         getName,
@@ -291,7 +311,8 @@ function Player(name , token) {
         getScore,
         getPlays,
         addPlay,
-        addWin
+        addWin,
+        reset
     };
 
 }
