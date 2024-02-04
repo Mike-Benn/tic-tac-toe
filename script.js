@@ -3,6 +3,8 @@ function ScreenController() {
     const modal = document.querySelector('.modal');
     const overMessage = document.querySelector('#gameover-message');
     const overImage = document.querySelector('#gameover-image');
+    const gameoverHeader = document.querySelector('.gameover-header');
+    const gameoverDeclaration = document.querySelector('.gameover-declaration');
     const xSelected = document.querySelector('#player-one-selected');
     const xImageSelected = document.querySelector('#player-one-image-selected');
     const oSelected = document.querySelector('#player-two-selected');
@@ -14,6 +16,7 @@ function ScreenController() {
     const boardDiv = document.querySelector('.board');
     const p1Score = document.querySelector('.p1-score');
     const p2Score = document.querySelector('.p2-score');
+    const tiesScore = document.querySelector('.ties-score');
     
     const game = GameController();
     
@@ -71,12 +74,25 @@ function ScreenController() {
         } else if (currentState === "gameover") {
             
             if (game.getWinner() === "X") {
+                overImage.style.removeProperty("display");
                 overImage.src = "./images/xletter.png";
                 overImage.alt = "Picture of the letter X";
+                gameoverHeader.textContent = "CONGRATULATIONS!";
+                gameoverDeclaration.textContent = "WINS THE ROUND";
+                p1Score.textContent = game.getActivePlayer().getScore();
                 
-            } else {
+            } else if(game.getWinner() === "O") {
+                overImage.style.removeProperty("display");
                 overImage.src = "./images/oletter.png";
                 overImage.alt = "Picture of the letter O";
+                gameoverHeader.textContent = "CONGRATULATIONS";
+                gameoverDeclaration.textContent = "WINS THE ROUND";
+                p2Score.textContent = game.getActivePlayer().getScore();
+            } else {
+                overImage.style.display = "none";
+                gameoverHeader.textContent = "OH NO!!!";
+                gameoverDeclaration.textContent = "THIS ROUND ENDS IN A TIE";
+                tiesScore.textContent = parseInt(tiesScore.textContent) + 1;
             }
             modal.style.display = "block";
             overMessage.style.display = "grid";
@@ -140,6 +156,7 @@ function GameController() {
         }
 
         if (playsList.length == 5) {
+            winner = "tie";
             gameState = "gameover";
         }
 
@@ -147,10 +164,12 @@ function GameController() {
 
 
     const switchTurn = () => {
-        if (activePlayer === players[0]) {
-            activePlayer = players[1];
-        } else {
-            activePlayer = players[0];
+        if (gameState === "active") {
+            if (activePlayer === players[0]) {
+                activePlayer = players[1];
+            } else {
+                activePlayer = players[0];
+            }
         }
     };
 
@@ -250,7 +269,7 @@ function GameBoard() {
 function Player(name , token) {
     const playerName = name;
     const playerToken = token;
-    const score = 0;
+    let score = 0;
     const plays = [];
 
     const getName = () => playerName;
@@ -262,7 +281,9 @@ function Player(name , token) {
         plays.push(location);
     };
 
-    const addWin = () => score + 1;
+    const addWin = () => {
+        score = score + 1;
+    }
 
     return {
         getName,
