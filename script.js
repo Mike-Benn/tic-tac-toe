@@ -1,5 +1,8 @@
 function ScreenController() {
-    const game = GameController();
+    
+    const modal = document.querySelector('.modal');
+    const overMessage = document.querySelector('#gameover-message');
+    const overImage = document.querySelector('#gameover-image');
     const xSelected = document.querySelector('#player-one-selected');
     const xImageSelected = document.querySelector('#player-one-image-selected');
     const oSelected = document.querySelector('#player-two-selected');
@@ -9,6 +12,11 @@ function ScreenController() {
     const oDeselected = document.querySelector('#player-two-deselected');
     const oImageDeselected = document.querySelector('#player-two-image-deselected');
     const boardDiv = document.querySelector('.board');
+    const p1Score = document.querySelector('.p1-score');
+    const p2Score = document.querySelector('.p2-score');
+    
+    const game = GameController();
+    
 
     const updateScreen = () => {
         
@@ -30,7 +38,7 @@ function ScreenController() {
 
 
         if (currentState === "active") { 
-
+            
             
             const activePlayer = game.getActivePlayer();
 
@@ -61,7 +69,17 @@ function ScreenController() {
 
             
         } else if (currentState === "gameover") {
-            const activePlayer = null;
+            
+            if (game.getWinner() === "X") {
+                overImage.src = "./images/xletter.png";
+                overImage.alt = "Picture of the letter X";
+                
+            } else {
+                overImage.src = "./images/oletter.png";
+                overImage.alt = "Picture of the letter O";
+            }
+            modal.style.display = "block";
+            overMessage.style.display = "grid";
             
                      
         } 
@@ -88,6 +106,7 @@ function GameController() {
     const playerOne = Player("Xander" , "X");
     const playerTwo = Player("Oliver" , "O");
     const players = [playerOne , playerTwo];
+    let winner = undefined;
     let activePlayer = players[0];
     const board = GameBoard();
     let gameState = "active"; // choices are "active" , "gameover" , "menu"
@@ -96,7 +115,9 @@ function GameController() {
 
     const getState = () => gameState;
 
-    function isWinner(player) {
+    const getWinner = () => winner;
+
+    function isGameOver(player) {
         let playsList = player.getPlays();
         let comboList = board.getCombinations();
 
@@ -108,6 +129,8 @@ function GameController() {
                 if (currCombo.has(playsList[j])) {
                     counter = counter + 1;
                     if (counter >= 3) {
+                        winner = player.getToken();
+                        player.addWin();
                         gameState = "gameover";
                         
 
@@ -148,7 +171,7 @@ function GameController() {
             currActivePlayer.addPlay(location);
             
             if (currActivePlayer.getPlays().length >= 3) {
-                isWinner(currActivePlayer);
+                isGameOver(currActivePlayer);
                 switchTurn();
 
 
@@ -167,7 +190,8 @@ function GameController() {
         playRound,
         getActivePlayer,
         getBoard,
-        getState
+        getState,
+        getWinner
     }
 
 }
@@ -238,12 +262,15 @@ function Player(name , token) {
         plays.push(location);
     };
 
+    const addWin = () => score + 1;
+
     return {
         getName,
         getToken,
         getScore,
         getPlays,
-        addPlay
+        addPlay,
+        addWin
     };
 
 }
